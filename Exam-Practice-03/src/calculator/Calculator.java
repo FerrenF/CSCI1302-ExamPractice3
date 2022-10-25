@@ -35,6 +35,7 @@ public class Calculator extends Application {
 			gridPane.add(new Label("Total Payment:"), 0, 4);
 			gridPane.add(tfTotalPayment, 1, 4);
 			gridPane.add(btCalculate, 1, 5);
+			//fart
 
 			// Set properties for UI
 			gridPane.setAlignment(Pos.CENTER);
