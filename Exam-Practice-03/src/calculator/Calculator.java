@@ -1,79 +1,111 @@
 package calculator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-
+import java.awt.Toolkit;
+import java.awt.Dimension;
 public class Calculator extends Application {	
-		private TextField tfAnnualInterestRate = new TextField();
-		private TextField tfNumberOfYears = new TextField();
-		private TextField tfLoanAmount = new TextField();
-		private TextField tfMonthlyPayment = new TextField();
-		private TextField tfTotalPayment = new TextField();
-		private Button btCalculate = new Button("Calculate");
-
+		private TextField outputField = new TextField("Output");
+		private class calculatorButton extends Button{			
+			public calculatorButton(String function){
+				super();
+				this.setText(function);
+				this.setTextAlignment(TextAlignment.CENTER);
+				this.setStyle("-fx-border-width:1px; -fx-border-color:  #777777;"
+						+ "-fx-border-width: 1px;"
+						+ "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #eeeeee, #dddddd);"
+						+ "-fx-effect: dropshadow( one-pass-box , #EEEEEE , 2 , 0.0 , 2 , 0 );");
+				this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			}
+		}
+		
 		@Override // Override the start method in the Application class
 		public void start(Stage primaryStage) {
+			
+			Dimension windowSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+			windowSize.setSize((windowSize.getWidth()*.25)*1.25, windowSize.getWidth()*.25);
+			primaryStage.setResizable(false);		
+			
+			
+			VBox root = new VBox();
+			root.setPadding(new Insets(5,5,5,5));
+			
 			// Create UI
 			GridPane gridPane = new GridPane();
 			gridPane.setHgap(5);
 			gridPane.setVgap(5);
-			gridPane.add(new Label("Annual Interest Rate:"), 0, 0);
-			gridPane.add(tfAnnualInterestRate, 1, 0);
-			gridPane.add(new Label("Number of Years:"), 0, 1);
-			gridPane.add(tfNumberOfYears, 1, 1);
-			gridPane.add(new Label("Loan Amount:"), 0, 2);
-			gridPane.add(tfLoanAmount, 1, 2);
-			gridPane.add(new Label("Monthly Payment:"), 0, 3);
-			gridPane.add(tfMonthlyPayment, 1, 3);
-			gridPane.add(new Label("Total Payment:"), 0, 4);
-			gridPane.add(tfTotalPayment, 1, 4);
-			gridPane.add(btCalculate, 1, 5);
-			//fart
-
+		
+			String[] buttonLabels = {"1","2","3","+","4","5","6","-","7","8","9","*","0","C","CE","/"};
+			calculatorButton[] calculatorButtons = new calculatorButton[buttonLabels.length];
+			for(int i = 0; i < calculatorButtons.length;i++) {
+				calculatorButtons[i] = new calculatorButton(buttonLabels[i]);
+			}
 			// Set properties for UI
 			gridPane.setAlignment(Pos.CENTER);
-			tfAnnualInterestRate.setAlignment(Pos.BOTTOM_RIGHT);
-			tfNumberOfYears.setAlignment(Pos.BOTTOM_RIGHT);
-			tfLoanAmount.setAlignment(Pos.BOTTOM_RIGHT);
-			tfMonthlyPayment.setAlignment(Pos.BOTTOM_RIGHT);
-			tfTotalPayment.setAlignment(Pos.BOTTOM_RIGHT);
-			tfMonthlyPayment.setEditable(false);
-			tfTotalPayment.setEditable(false);
-			GridPane.setHalignment(btCalculate, HPos.RIGHT);
+			
+			//GridPane.setHalignment(btCalculate, HPos.RIGHT);
 
+			gridPane.addRow(0, Arrays.copyOfRange(calculatorButtons,0, 4));
+			gridPane.addRow(1, Arrays.copyOfRange(calculatorButtons,4, 8));
+			gridPane.addRow(2, Arrays.copyOfRange(calculatorButtons,8, 12));
+			gridPane.addRow(3, Arrays.copyOfRange(calculatorButtons,12, 16));
+			gridPane.setPrefHeight(windowSize.height);
+			
+			RowConstraints rc = new RowConstraints();
+			rc.setVgrow(Priority.ALWAYS);
+			rc.setValignment(VPos.CENTER);
+			rc.setFillHeight(true);
+			ColumnConstraints cc = new ColumnConstraints();
+			cc.setHgrow(Priority.ALWAYS);
+			cc.setHalignment(HPos.CENTER);
+
+			// A set of constraints should be defined for each column and row
+			for (int i = 0; i < gridPane.getColumnCount(); i++) {
+				gridPane.getColumnConstraints().add(cc);
+			}
+			for (int i = 0; i < gridPane.getRowCount(); i++) {
+				gridPane.getRowConstraints().add(rc);
+			}
+			
+			
+			Font customFont = new Font("Calibri",16);
+			outputField.setFont(customFont);
+			outputField.setStyle("-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #FFF, #EEE);"
+								+ "-fx-border-color:  #777777;"
+								+ "-fx-border-width: 1px;");	
+			root.getChildren().addAll(outputField,gridPane);
+			VBox.setMargin(outputField, new Insets(5,0,5,0));
 			// Process events
-			btCalculate.setOnAction(e -> calculateLoanPayment());
-
+		
+			gridPane.getChildren().stream().forEach(e -> e.onMouseClickedProperty().set(f->this.buttonAction(((calculatorButton)e).getText())));
+			
 			// Create a scene and place it in the stage
-			Scene scene = new Scene(gridPane, 400, 250);
+			Scene scene = new Scene(root, windowSize.getWidth(), windowSize.getHeight());
 			primaryStage.setTitle("Calculator"); // Set title
 			primaryStage.setScene(scene); // Place the scene in the stage
 			primaryStage.show(); // Display the stage
 		}
 
-		private void calculateLoanPayment() {
-			// Get values from text fields
-			double interest =
-					Double.parseDouble(tfAnnualInterestRate.getText());
-			int year = Integer.parseInt(tfNumberOfYears.getText());
-			double loanAmount =
-					Double.parseDouble(tfLoanAmount.getText());
-
-			// Create a loan object. Loan defined in Listing 10.2
-			//Loan loan = new Loan(interest, year, loanAmount);
-
-			// Display monthly payment and total payment
-		//	tfMonthlyPayment.setText(String.format("$%.2f",
-		//			loan.getMonthlyPayment()));
-			//tfTotalPayment.setText(String.format("$%.2f",
-			//		loan.getTotalPayment()));
+		public void buttonAction(String button) {
+			System.out.print(button);
 		}
 
 		/**
