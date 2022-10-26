@@ -62,9 +62,13 @@ public class MPGCalculator extends Application {
 		// action events
 		btCalculate.setOnAction(e -> calculateMPG());
 
-		// Create a scene and place it in the stage
-		Scene scene = new Scene(vb1, 500, 250);
-
+		// Create a scene and place it in the stage. 
+		// Not specifying values forces the form to auto-size.
+		Scene scene = new Scene(vb1);
+		
+		//This way, we don't actually have to program this feature.
+		primaryStage.setResizable(false);
+		
 		primaryStage.setTitle("MPGCalculator"); // Set title
 		primaryStage.setScene(scene); // Place the scene in the stage
 		primaryStage.show(); // Display the stage
@@ -76,9 +80,26 @@ public class MPGCalculator extends Application {
 		double miles = Double.parseDouble(tfMiles.getText());
 		double gallons = Double.parseDouble(tfGallons.getText());
 
-		lbOutput.setText(String.format("%.2f Miles Per Gallons", miles / gallons));
+		boolean error = false;
+		String outputText = "0";
+			if(gallons<=0) {
+				error=true;
+				outputText = "Gallons used must be greater than 0.";
+			}
+			else if(miles==0) {
+				outputText = "Distance travelled must be greater than 0.";
+				error=true;
+			}
+			else
+			{
+				outputText = String.format("%.2f Miles Per Gallons", miles / gallons);
+			}
+		lbOutput.setText(outputText);
+		
+		if(!error) {
 		tfGallons.setText("");
 		tfMiles.setText("");
+		}
 	}
 
 	/**
