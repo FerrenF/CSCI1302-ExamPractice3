@@ -23,6 +23,15 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.awt.Dimension;
 
+/* 
+ * Author: Joseph Berrigan, Hunter Williams
+ * Date: 10/26/2022
+ * Practice assignment 3
+ * Name: Calculator.java
+ * Course: CSCI 1302
+ * Description: GUI calculator for practice assignment 3
+ */
+
 public class Calculator extends Application {
 
 	// Set to false to disable console debug output.
