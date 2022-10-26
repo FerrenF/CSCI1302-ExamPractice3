@@ -180,7 +180,7 @@ public class Calculator extends Application {
 						operator = target;
 						break;
 					default:
-						BigDecimal v = BigDecimal.valueOf(Double.valueOf(target));
+						BigDecimal v = new BigDecimal(target).stripTrailingZeros();
 						switch (operator) {
 						case "+":
 							runningTotal = runningTotal.add(v);
@@ -207,16 +207,9 @@ public class Calculator extends Application {
 						operator = "";
 					}
 				}
-
-				// a very dirty way of handling this representation which is outside of our
-				// 'allowed characters' range - it has the side effect of not allowing the user
-				// to click the input field to add to the sum.
-				// This actually should never fire.
-				String set = runningTotal.stripTrailingZeros().toPlainString();
-				if (set.contains("E")) {
-					this.systemSetText(set);
-					return;
-				}
+				
+				// using toPlainString will exclude exponents from the return values
+				String set = runningTotal.toPlainString();
 				this.setText(set);
 			} catch (ArithmeticException e) {
 				String m = "Arithmetic Error: " + e.getMessage();
