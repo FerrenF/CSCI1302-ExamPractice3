@@ -61,6 +61,8 @@ public class MPGCalculator extends Application {
 
 		// action events
 		btCalculate.setOnAction(e -> calculateMPG());
+		tfGallons.setOnAction(e -> calculateMPG());
+		tfMiles.setOnAction(e -> calculateMPG());
 
 		// Create a scene and place it in the stage.
 		// Not specifying values forces the form to auto-size.
@@ -92,7 +94,10 @@ public class MPGCalculator extends Application {
 			} else if (miles == 0) {
 				outputText = "Distance travelled must be greater than 0.";
 				error = true;
-			} else {
+			} else if (gallons == 1) {
+				outputText = String.format("%.2f Miles Per Gallon", miles / gallons);
+			}
+			else {
 				outputText = String.format("%.2f Miles Per Gallons", miles / gallons);
 			}
 		} catch (Exception e) {
