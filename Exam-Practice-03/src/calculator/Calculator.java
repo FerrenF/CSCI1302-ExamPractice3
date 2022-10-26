@@ -1,6 +1,5 @@
 package calculator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.application.Application;
@@ -10,10 +9,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -22,8 +18,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import java.awt.Toolkit;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.awt.Dimension;
 
@@ -193,7 +189,12 @@ public class Calculator extends Application {
 										if(v.doubleValue() == 0) {
 											throw new ArithmeticException("Divide by 0 ");
 										}
-										runningTotal=runningTotal.divide(v,RoundingMode.HALF_UP);
+										try {
+											runningTotal=runningTotal.divide(v);
+										}
+										catch(ArithmeticException e) {
+											runningTotal=runningTotal.divide(v, new MathContext(10, RoundingMode.HALF_DOWN));
+										}
 										break;
 									case "*":
 										runningTotal=runningTotal.multiply(v);
