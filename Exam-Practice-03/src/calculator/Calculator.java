@@ -35,7 +35,7 @@ import java.awt.Dimension;
 public class Calculator extends Application {
 
 	// Set to false to disable console debug output.
-	private boolean debug = true;
+	private boolean debug = false;
 
 	private void dbg(String m) {
 		if (!debug) {
@@ -49,8 +49,8 @@ public class Calculator extends Application {
 	private class calculatorOutputField extends TextField {
 
 		// class properties
-		private final String styleNormal = "-fx-background-color: #FFF;"
-				+ "-fx-border-color:  #777777;" + "-fx-border-width: 1px;";
+		private final String styleNormal = "-fx-background-color: #FFF;" + "-fx-border-color:  #777777;"
+				+ "-fx-border-width: 1px;";
 		private final int maxLength = 255; // arbitrary
 		private boolean needsClear = true;
 		private boolean systemOutput = false;
@@ -64,7 +64,7 @@ public class Calculator extends Application {
 			Font customFont = new Font("Calibri", 16);
 			this.setFont(customFont);
 			this.setStyle(styleNormal);
-		
+
 			// Event handlers
 			this.setOnMouseClicked(e -> {
 				if (needsClear) {
@@ -207,10 +207,12 @@ public class Calculator extends Application {
 						operator = "";
 					}
 				}
-				
-				//a very dirty way of handling this representation which is outside of our 'allowed characters' range - it has the side effect of not allowing the user to click the input field to add to the sum.
-				//we 'could' handle this in a more functional manner, but it is way too outside of a project which has already spiraled out of scope-creep control.
-				String set = runningTotal.toPlainString();
+
+				// a very dirty way of handling this representation which is outside of our
+				// 'allowed characters' range - it has the side effect of not allowing the user
+				// to click the input field to add to the sum.
+				// This actually should never fire.
+				String set = runningTotal.stripTrailingZeros().toPlainString();
 				if (set.contains("E")) {
 					this.systemSetText(set);
 					return;
