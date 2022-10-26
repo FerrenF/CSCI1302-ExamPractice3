@@ -40,7 +40,7 @@ public class Calculator extends Application {
 	private class calculatorOutputField extends TextField {
 
 		// class properties
-		private final String styleNormal = "-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #FFF, #EEE);"
+		private final String styleNormal = "-fx-background-color: #FFF;"
 				+ "-fx-border-color:  #777777;" + "-fx-border-width: 1px;";
 		private final int maxLength = 255; // arbitrary
 		private boolean needsClear = true;
@@ -55,7 +55,7 @@ public class Calculator extends Application {
 			Font customFont = new Font("Calibri", 16);
 			this.setFont(customFont);
 			this.setStyle(styleNormal);
-
+		
 			// Event handlers
 			this.setOnMouseClicked(e -> {
 				if (needsClear) {
@@ -198,11 +198,15 @@ public class Calculator extends Application {
 						operator = "";
 					}
 				}
-				if (String.valueOf(runningTotal) == "E") {
-					this.systemSetText("E");
+				
+				//a very dirty way of handling this representation which is outside of our 'allowed characters' range - it has the side effect of not allowing the user to click the input field to add to the sum.
+				//we 'could' handle this in a more functional manner, but it is way too outside of a project which has already spiraled out of scope-creep control.
+				String set = runningTotal.toPlainString();
+				if (set.contains("E")) {
+					this.systemSetText(set);
 					return;
 				}
-				this.setText(String.valueOf(runningTotal));
+				this.setText(set);
 			} catch (ArithmeticException e) {
 				String m = "Arithmetic Error: " + e.getMessage();
 				dbg(m);
