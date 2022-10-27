@@ -29,7 +29,9 @@ import java.awt.Dimension;
  * Practice assignment 3
  * Name: Calculator.java
  * Course: CSCI 1302
- * Description: GUI calculator for practice assignment 3
+ * Description: GUI calculator for practice assignment 3.
+ * NOTE: This calculator does not perform order of operations, so don't do your taxes with it.
+ *
  */
 
 public class Calculator extends Application {
@@ -137,6 +139,8 @@ public class Calculator extends Application {
 		// Instruct the input field to calculate the equation currently in it's text
 		// area.
 		private void calculateOutput() {
+			
+			//All hail regular expressions
 			String[] steps = this.getText().split("((?=:|\\+|\\-|\\/|\\*)|(?<=:|\\+|\\-|\\/|\\*))");
 			BigDecimal runningTotal = BigDecimal.ZERO;
 			dbg("Performing steps:" + Arrays.toString(steps));
@@ -195,7 +199,10 @@ public class Calculator extends Application {
 							try {
 								runningTotal = runningTotal.divide(v);
 							} catch (ArithmeticException e) {
-								runningTotal = runningTotal.divide(v, new MathContext(10, RoundingMode.HALF_DOWN));
+								
+								//So technically, our divide operations are limited to 50 significant digits. 
+								//That's probably enough for anything crazy that might run through here. Probably.
+								runningTotal = runningTotal.divide(v, new MathContext(50, RoundingMode.HALF_UP));
 							}
 							break;
 						case "*":
@@ -208,7 +215,8 @@ public class Calculator extends Application {
 					}
 				}
 				
-				// using toPlainString will exclude exponents from the return values
+				// BigDecimal's toPlainString method will exclude exponents from the return values. 
+				// BigDecimal also offers us an engineering format, which is neat. It's base 3.
 				String set = runningTotal.toPlainString();
 				this.setText(set);
 			} catch (ArithmeticException e) {
