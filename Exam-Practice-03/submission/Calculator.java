@@ -1,5 +1,4 @@
 
-
 import java.util.Arrays;
 
 import javafx.application.Application;
@@ -148,7 +147,7 @@ public class Calculator extends Application {
 
 				String operator = "";
 				for (int i = 0; i < steps.length; i++) {
-					String target = steps[i];
+					String target = steps[i].trim();
 					switch (target) {
 					case "+":
 						if (operator.equals("-")) {
