@@ -32,7 +32,7 @@ public class MPGCalculator extends Application {
 	@Override // Override the start method in the Application class
 	public void start(Stage primaryStage) {
 		// Create UI panes
-		StackPane sp1 = new StackPane();
+
 		VBox vb1 = new VBox(20);
 		HBox hb1 = new HBox(10);
 		HBox hb2 = new HBox(50);
@@ -44,9 +44,8 @@ public class MPGCalculator extends Application {
 		// double scaleRatio = 1/5.0;
 		// vb1.setMaxWidth((int)(d1.getWidth()*scaleRatio));
 
-		vb1.setStyle("-fx-border-width: 1px; -fx-border-color: black;");
-		hb1.setStyle("-fx-border-width: 1px; -fx-border-color: red; -fx-padding: 10px;");
-		hb2.setStyle("-fx-border-width: 1px; -fx-border-color: blue;");
+		hb1.setStyle(" -fx-padding: 5px;");
+		hb2.setStyle("-fx-padding: 5px;");
 		hb2.setAlignment(Pos.CENTER);
 		hb1.setAlignment(Pos.CENTER);
 
@@ -96,8 +95,7 @@ public class MPGCalculator extends Application {
 				error = true;
 			} else if (gallons == 1) {
 				outputText = String.format("%.2f Miles Per Gallon", miles / gallons);
-			}
-			else {
+			} else {
 				outputText = String.format("%.2f Miles Per Gallons", miles / gallons);
 			}
 		} catch (Exception e) {
