@@ -102,9 +102,8 @@ public class MPGCalculator extends Application {
 			error = true;
 			outputText = "Invalid input.";
 		}
-		lbOutput.setText(outputText);
-
-		if (!error) {
+		finally {
+			lbOutput.setText(outputText);
 			tfGallons.setText("");
 			tfMiles.setText("");
 		}
